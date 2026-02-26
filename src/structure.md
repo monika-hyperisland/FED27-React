@@ -1,0 +1,12 @@
+- src
+-- App.jsx
+-- App.modules.css
+-- Components
+--- Footer.jsx
+--- Footer.modules.css
+--- Components
+---- FooterLinks.jsx
+---- FooterLinks.modules.css
+
+--- Navbar.jsx
+--- Navbar.modules.css
