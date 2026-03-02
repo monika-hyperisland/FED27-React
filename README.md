@@ -1,18 +1,41 @@
-# Getting Started with Create React App
+# React Learning Project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A hands-on React learning environment with lesson examples and guided exercises.
 
-## Available Scripts
+## Project Structure
 
-In the project directory, you can run:
+```
+├── src/                  # Lesson files and examples
+│   ├── Components/       # Components created during lessons
+│   └── App.jsx           # Main lesson app entry point
+│
+└── Exercises/            # Practice exercises
+    └── exercises-app/    # Standalone exercise app
+```
 
-### `npm start`
+## Getting Started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Lesson App
 
-The page will reload when you make changes.
+```bash
+npm install
+npm start
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view in your browser.
+
+### Exercises App
+
+```bash
+cd Exercises/exercises-app
+npm install
+npm start
+```
 
 ## Exercises
 
-See the README in Exercises folder.
+The `Exercises/` folder contains guided practice exercises. See [Exercises/README.md](Exercises/README.md) for detailed instructions.
+
+**Current exercises:**
+
+- **Exercise 1:** Components, Props, and Layout
