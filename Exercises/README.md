@@ -155,7 +155,7 @@ npm install react-router-dom
    - Open `src/App.jsx`
    - Import `BrowserRouter`, `Routes`, and `Route` from `react-router-dom`
    - Wrap your entire app in `<BrowserRouter>`
-   - Inside the `<Layout>` component, use `<Routes>` to define your route configuration
+   - Inside the `<App>` component, use `<Routes>` to define your route configuration
 
 2. **Create route definitions**
    - Add a `<Route>` for the homepage at path `"/"`
