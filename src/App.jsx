@@ -41,6 +41,10 @@ const App = () => {
             <Route path="reviews" element={<ProductReviews />} />
           </Route>
         </Route>
+
+        {/*<Route path="characters" element={<Characters />} >*/}
+        {/*  // specific character route with dynamic id*/}
+        {/*</Route>*/}
       </Routes>
     </BrowserRouter>
   );
