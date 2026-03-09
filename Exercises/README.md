@@ -342,3 +342,235 @@ When you run the app, you should see:
 - The detail page shows full character information (name, height, mass, etc.)
 - A "Back to Characters" link returns to the list
 - Error handling displays a message if the API request fails
+
+## Exercise 5: useContext
+
+**Goal:** Learn how to share state across multiple components without prop drilling using React's Context API. You'll create a character context to store fetched data globally and a favorites system to track user selections across the app.
+
+### Part A: Character Context (Store API Data Globally)
+
+**Goal:** Move the character fetching logic into a context so multiple components can access the character data without re-fetching or prop drilling.
+
+#### Steps
+
+1. **Create the context folder and file**
+   - Create a new folder `src/context`
+   - Create a new file `src/context/CharacterContext.jsx`
+   - Import `createContext`, `useState`, `useEffect`, and `useContext` from React
+
+2. **Create and export the context**
+   - Use `createContext()` to create a new context
+   - Export it as a named export called `CharacterContext`
+
+3. **Create the CharacterProvider component**
+   - Create a functional component called `CharacterProvider` that accepts `children` as a prop
+   - Inside, set up state for `characters` (array, initially empty)
+   - Set up state for `loading` (boolean, initially `true`)
+   - Set up state for `error` (string or null, initially `null`)
+
+4. **Move the fetch logic into the provider**
+   - Add a `useEffect` hook with an empty dependency array
+   - Inside, fetch characters from `https://swapi.info/api/people`
+   - Update the `characters` state with the fetched data
+   - Set `loading` to `false` when done
+   - Handle errors by setting the `error` state
+
+5. **Return the Provider with values**
+   - Return `<CharacterContext.Provider>` wrapping `{children}`
+   - Pass an object to the `value` prop containing `characters`, `loading`, and `error`
+   - Export the `CharacterProvider` component
+
+6. **Create a custom hook for consuming the context**
+   - In the same file, create a function called `useCharacters`
+   - Inside, call `useContext(CharacterContext)` and store the result
+   - Add a check: if the context is undefined, throw an error with a helpful message
+   - Return the context value
+   - Export the hook
+
+7. **Wrap your app with the CharacterProvider**
+   - Open `App.jsx`
+   - Import `CharacterProvider` from the context file
+   - Wrap your existing content (inside `BrowserRouter`) with `<CharacterProvider>`
+
+8. **Refactor CharacterList to use context**
+   - Open `CharacterList.jsx`
+   - Remove all the local state variables (`characters`, `loading`, `error`)
+   - Remove the `useEffect` that fetches data
+   - Import and call the `useCharacters` hook
+   - Destructure `characters`, `loading`, and `error` from the hook's return value
+   - The rest of your JSX should work without changes
+
+9. **Display character count in the Navbar**
+   - Open `Navbar.jsx`
+   - Import the `useCharacters` hook
+   - Call the hook and destructure `characters`
+   - Update the Characters link text to include the count (e.g., "Characters (82)")
+
+### Part B: Favorites Context (User Interactions)
+
+**Goal:** Create a favorites system that allows users to save their favorite characters, accessible from any component.
+
+#### Steps
+
+1. **Create the FavoritesContext file**
+   - Create a new file `src/context/FavoritesContext.jsx`
+   - Import `createContext`, `useState`, and `useContext` from React
+
+2. **Create and export the context**
+   - Use `createContext()` to create a new context
+   - Export it as `FavoritesContext`
+
+3. **Create the FavoritesProvider component**
+   - Create a functional component called `FavoritesProvider` that accepts `children`
+   - Set up state for `favorites` (array, initially empty)
+
+4. **Create the addFavorite function**
+   - Create a function that accepts a character object
+   - Use the state setter to add the character to the favorites array
+   - Use the spread operator to preserve existing favorites
+
+5. **Create the removeFavorite function**
+   - Create a function that accepts a character ID
+   - Use the state setter with `filter` to remove the character with that ID
+
+6. **Create the isFavorite function**
+   - Create a function that accepts a character ID
+   - Use the `some` array method to check if any favorite has that ID
+   - Return `true` or `false`
+
+7. **Create the toggleFavorite function**
+   - Create a function that accepts a character object
+   - Check if the character is already a favorite using `isFavorite`
+   - If yes, call `removeFavorite`; if no, call `addFavorite`
+
+8. **Return the Provider with all values**
+   - Return `<FavoritesContext.Provider>` wrapping `{children}`
+   - Pass an object to `value` containing: `favorites`, `addFavorite`, `removeFavorite`, `isFavorite`, and `toggleFavorite`
+   - Export the component
+
+9. **Create the useFavorites custom hook**
+   - Create a function called `useFavorites`
+   - Call `useContext(FavoritesContext)` and add error handling
+   - Export the hook
+
+10. **Add FavoritesProvider to your app**
+    - Open `App.jsx`
+    - Import `FavoritesProvider`
+    - Nest it inside `CharacterProvider` (providers can be nested)
+
+11. **Add favorite button to CharacterList**
+    - Open `CharacterList.jsx`
+    - Import the `useFavorites` hook
+    - Destructure `toggleFavorite` and `isFavorite` from the hook
+    - Inside your character map, add a button next to each character
+    - Set the button's `onClick` to call `toggleFavorite` with the character's id and name
+    - Use `isFavorite` to conditionally show different text (e.g., filled star vs empty star)
+
+12. **Add favorite button to CharacterDetail**
+    - Open `CharacterDetail.jsx`
+    - Import and use the `useFavorites` hook
+    - Add a favorite toggle button that works the same way as in the list
+
+13. **Create a Favorites page component**
+    - Create a new file `src/components/Favorites/Favorites.jsx`
+    - Import `Link` from `react-router-dom`
+    - Import the `useFavorites` hook
+    - Create a functional component that displays all favorited characters
+    - Map over the favorites array and show each character's name as a link to their detail page
+    - Add a "Remove" button for each that calls `removeFavorite`
+    - Handle the empty state with a message like "No favorites yet"
+
+14. **Add the Favorites route**
+    - Open `App.jsx`
+    - Import the `Favorites` component
+    - Add a new Route with path `/favorites` that renders the Favorites component
+
+15. **Add Favorites link to Navbar**
+    - Open `Navbar.jsx`
+    - Import the `useFavorites` hook
+    - Destructure `favorites` from the hook
+    - Add a new NavLink to `/favorites`
+    - Display the favorites count in the link text (e.g., "Favorites (3)")
+
+### Part C: Theme Context (Bonus Challenge)
+
+**Goal:** Implement a dark/light theme toggle using context.
+
+#### Steps
+
+1. **Create the ThemeContext file**
+   - Create a new file `src/context/ThemeContext.jsx`
+   - Import `createContext`, `useState`, and `useContext` from React
+
+2. **Create the ThemeProvider component**
+   - Create the context with `createContext()`
+   - Create a `ThemeProvider` component with `children` prop
+   - Set up state for `theme` (string, initially `'light'`)
+
+3. **Create the toggleTheme function**
+   - Create a function that toggles the theme value
+   - If current theme is `'light'`, set it to `'dark'`
+   - If current theme is `'dark'`, set it to `'light'`
+
+4. **Set up the Provider and custom hook**
+   - Return the Provider with `theme` and `toggleTheme` in the value
+   - Create and export a `useTheme` custom hook
+
+5. **Add ThemeProvider to your app**
+   - In `App.jsx`, import and wrap your app with `ThemeProvider`
+   - You can nest it with the other providers
+
+6. **Apply theme class to Layout**
+   - Open `Layout.jsx`
+   - Import and use the `useTheme` hook
+   - Add a class to the root element based on the current theme
+   - Use a ternary: if theme is `'dark'`, use `'dark-theme'`, otherwise `'light-theme'`
+
+7. **Add theme CSS variables**
+   - Open your main CSS file (e.g., `App.css` or `index.css`)
+   - Define CSS variables for `.light-theme` (light background, dark text)
+   - Define CSS variables for `.dark-theme` (dark background, light text)
+   - Apply these variables to your body or main container styles
+
+8. **Add a theme toggle button**
+   - In `Navbar.jsx`, import the `useTheme` hook
+   - Destructure `theme` and `toggleTheme`
+   - Add a button that calls `toggleTheme` when clicked
+   - Display text or an icon indicating the current theme
+
+### Hints
+
+- Creating context: `const MyContext = createContext()`
+- Provider syntax: `<MyContext.Provider value={{ data, functions }}>{children}</MyContext.Provider>`
+- Consuming context: `const value = useContext(MyContext)`
+- Custom hooks should start with "use" and can add error handling for when context is missing
+- You can nest multiple providers - each provides different data to its children
+- The `value` prop accepts any JavaScript value (object, array, function, etc.)
+- Use the spread operator to add items: `setItems(prev => [...prev, newItem])`
+- Use `filter` to remove items: `setItems(prev => prev.filter(item => item.id !== idToRemove))`
+- Use `some` to check existence: `items.some(item => item.id === targetId)`
+
+### Expected Result
+
+When you run the app, you should see:
+
+**Part A:**
+- Character data is fetched once when the app loads
+- The Navbar shows the character count (e.g., "Characters (82)")
+- CharacterList displays characters without its own fetch logic
+- No duplicate API calls when navigating between pages
+
+**Part B:**
+- Each character in the list has a favorite button
+- Clicking the button toggles between filled and empty star
+- Character detail page also has a working favorite button
+- Navigating to `/favorites` shows all saved favorites
+- The Navbar shows the favorites count
+- Favorites persist when navigating between pages (but reset on page refresh)
+
+**Part C (Bonus):**
+- A theme toggle button appears in the Navbar
+- Clicking it switches the entire app between light and dark themes
+- The theme applies consistently across all pages
+
+---
