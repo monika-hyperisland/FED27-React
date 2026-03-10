@@ -1,4 +1,4 @@
-import { Home } from "./Home";
+// import { Home } from "./Home";
 import { About } from "./About";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { Dashboard } from "./Components/Dashboard/Dashboard";
@@ -14,41 +14,51 @@ import { MainLayout } from "./Components/Layouts/MainLayout";
 import { Contact } from "./Components/Pages/Contact";
 import { Services } from "./Components/Pages/Services";
 import {CharacterProvider} from "./Context/CharacterContext";
+import {Layout} from "./HIComponents/Layout";
+import {Homepage} from "./HIComponents/Homepage";
 
 const App = () => {
   return (
+    // <BrowserRouter>
+    //   <CharacterProvider>
+    //   <Routes>
+    //     {/* Layout Route (no path) - wraps child routes with shared layout */}
+    //     <Route element={<MainLayout />}>
+    //       <Route index element={<Home />} />
+    //       <Route path="about" element={<About />} />
+    //       <Route path="contact" element={<Contact />} />
+    //       <Route path="services" element={<Services />} />
+    //     </Route>
+    //
+    //     {/* Nested Routes Example - go to /dashboard or /dashboard/settings or /dashboard/profile */}
+    //     <Route path="dashboard" element={<Dashboard />}>
+    //       <Route index element={<DashboardHome />} />
+    //       <Route path="settings" element={<Settings />} />
+    //       <Route path="profile" element={<Profile />} />
+    //     </Route>
+    //
+    //     {/* Nested Dynamic Routes Example - go to /products or /products/1 or /products/1/reviews */}
+    //     <Route path="products" element={<Products />}>
+    //       <Route index element={<ProductsList />} />
+    //       <Route path=":productId" element={<ProductDetail />}>
+    //         <Route index element={<ProductSpecs />} />
+    //         <Route path="reviews" element={<ProductReviews />} />
+    //       </Route>
+    //     </Route>
+    //
+    //     {/*<Route path="characters" element={<Characters />} >*/}
+    //     {/*  // specific character route with dynamic id*/}
+    //     {/*</Route>*/}
+    //   </Routes>
+    //   </CharacterProvider>
+    // </BrowserRouter>
+
     <BrowserRouter>
-      <CharacterProvider>
       <Routes>
-        {/* Layout Route (no path) - wraps child routes with shared layout */}
-        <Route element={<MainLayout />}>
-          <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="services" element={<Services />} />
+        <Route element={<Layout />}>
+          <Route index element={<Homepage/>} />
         </Route>
-
-        {/* Nested Routes Example - go to /dashboard or /dashboard/settings or /dashboard/profile */}
-        <Route path="dashboard" element={<Dashboard />}>
-          <Route index element={<DashboardHome />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="profile" element={<Profile />} />
-        </Route>
-
-        {/* Nested Dynamic Routes Example - go to /products or /products/1 or /products/1/reviews */}
-        <Route path="products" element={<Products />}>
-          <Route index element={<ProductsList />} />
-          <Route path=":productId" element={<ProductDetail />}>
-            <Route index element={<ProductSpecs />} />
-            <Route path="reviews" element={<ProductReviews />} />
-          </Route>
-        </Route>
-
-        {/*<Route path="characters" element={<Characters />} >*/}
-        {/*  // specific character route with dynamic id*/}
-        {/*</Route>*/}
       </Routes>
-      </CharacterProvider>
     </BrowserRouter>
   );
 };
