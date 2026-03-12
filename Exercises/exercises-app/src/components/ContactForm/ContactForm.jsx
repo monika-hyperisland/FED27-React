@@ -17,7 +17,15 @@ const handleChange = (e) => {
 const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-};
+
+    setFormData({
+      name: "",
+      email: "",
+      message: "",
+    });
+  };
+
+
 
 return (
     <form onSubmit ={handleSubmit}>
