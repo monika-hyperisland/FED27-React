@@ -1,0 +1,15 @@
+.buttonLink {
+  display: inline-block;
+  margin: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #4f46e5;
+  color: white;
+  text-decoration: none;
+  border-radius: 0.25rem;
+  font-weight: bold;
+}
+
+.active {
+  background-color: #facc15;
+  color: black;
+}

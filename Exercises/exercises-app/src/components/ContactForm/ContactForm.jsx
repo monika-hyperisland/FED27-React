@@ -18,6 +18,8 @@ const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
 
+    alert("Form submitted successfully!");
+    
     setFormData({
       name: "",
       email: "",

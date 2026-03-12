@@ -1,7 +1,13 @@
+import { Link } from "react-router";
+
 const Navbar = () => {
     return (
         <nav>
-            <h1>Exercises App</h1>
+            <h1>Nav</h1>
+            <ul>
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/contact">Contact</Link></li>
+            </ul>       
         </nav>
     );
 };
