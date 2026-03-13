@@ -1,0 +1,16 @@
+.footer {
+  padding: 1.5rem 2rem;
+  background-color: var(--footer-bg);
+  text-align: center;
+  margin-top: auto;
+}
+
+.footer p {
+  margin: 0.25rem 0;
+  color: var(--text-color);
+}
+
+.tagline {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
