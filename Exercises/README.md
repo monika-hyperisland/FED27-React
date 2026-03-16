@@ -137,6 +137,8 @@ When you run the app, you should see:
 - Typing in any field updates the displayed value in real-time
 - Clicking submit logs the form data to the console and optionally clears the form
 
+---
+
 ## Exercise 3: Routing
 
 **Goal:** Learn how to set up client-side routing with `react-router-dom`, create navigation links, and render different components based on the URL.
@@ -214,6 +216,8 @@ When you run the app, you should see:
 - The URL in the browser updates without a full page reload
 - The Navbar and Footer remain visible on all pages (they're in the Layout)
 - If using `NavLink`, the current page's link should have the "active" class applied
+
+---
 
 ## Exercise 4: Fetching Data from an API
 
@@ -342,6 +346,8 @@ When you run the app, you should see:
 - The detail page shows full character information (name, height, mass, etc.)
 - A "Back to Characters" link returns to the list
 - Error handling displays a message if the API request fails
+
+---
 
 ## Exercise 5: useContext
 
@@ -572,5 +578,305 @@ When you run the app, you should see:
 - A theme toggle button appears in the Navbar
 - Clicking it switches the entire app between light and dark themes
 - The theme applies consistently across all pages
+
+---
+
+## Exercise 6: useRef and Refs as Props
+
+**Goal:** Learn how to use `useRef` for accessing DOM elements directly, storing mutable values that persist across renders, and passing refs to child components as props (React 19+ approach).
+
+### Part A: Focus Management with useRef
+
+**Goal:** Use `useRef` to manage focus on form inputs, implementing auto-focus and programmatic focus control.
+
+#### Steps
+
+1. **Enhance the ContactForm with auto-focus**
+   - Open `src/components/ContactForm/ContactForm.jsx`
+   - Import `useRef` and `useEffect` from React
+   - Create a ref for the name input using `useRef(null)`
+
+2. **Attach the ref to the input**
+   - Add the `ref` attribute to the name input field
+   - Set it to your created ref variable
+
+3. **Implement auto-focus on mount**
+   - Use `useEffect` with an empty dependency array
+   - Inside the effect, call `yourRef.current.focus()` to focus the input when the component mounts
+   - Add a check to ensure `yourRef.current` exists before calling focus
+
+4. **Add a "Clear & Refocus" button**
+   - Add a button that clears all form fields and refocuses on the name input
+   - Create a handler function that:
+     - Resets all state values to empty strings
+     - Calls `yourRef.current.focus()` to return focus to the name input
+
+5. **Add focus cycling for invalid fields**
+   - Create refs for the email and message inputs as well
+   - Modify the form submission to validate fields
+   - If a field is empty, focus on that field instead of submitting
+   - Show a validation message near the focused field
+
+### Part B: Stopwatch with useRef (Storing Mutable Values)
+
+**Goal:** Create a stopwatch component that uses `useRef` to store the interval ID, demonstrating how refs can hold values that persist across renders without causing re-renders.
+
+#### Steps
+
+1. **Create the Stopwatch component**
+   - Create a new file `src/components/Stopwatch/Stopwatch.jsx`
+   - Import `useState` and `useRef` from React
+   - Create a functional component called `Stopwatch`
+   - Export the component using a default export
+
+2. **Set up state for time display**
+   - Create state for `time` (number, initially `0`) - this represents milliseconds
+   - Create state for `isRunning` (boolean, initially `false`)
+
+3. **Create a ref to store the interval ID**
+   - Use `useRef(null)` to create a ref called `intervalRef`
+   - This will hold the interval ID without causing re-renders when updated
+
+4. **Implement the start function**
+   - Create a `start` function that:
+     - Sets `isRunning` to `true`
+     - Uses `setInterval` to increment `time` every 10 milliseconds
+     - Stores the interval ID in `intervalRef.current`
+     - Only starts if not already running (check `intervalRef.current`)
+
+5. **Implement the stop function**
+   - Create a `stop` function that:
+     - Sets `isRunning` to `false`
+     - Calls `clearInterval(intervalRef.current)` to stop the timer
+     - Sets `intervalRef.current` to `null`
+
+6. **Implement the reset function**
+   - Create a `reset` function that:
+     - Calls `stop()` to clear any running interval
+     - Sets `time` back to `0`
+
+7. **Format the time for display**
+   - Create a helper function to format milliseconds into `MM:SS.ms` format
+   - Calculate minutes, seconds, and centiseconds from the total milliseconds
+
+8. **Build the UI**
+   - Display the formatted time in a large font
+   - Add Start, Stop, and Reset buttons
+   - Disable Start when running, disable Stop when not running
+
+9. **Clean up the interval on unmount**
+   - Add a `useEffect` that returns a cleanup function
+   - The cleanup function should call `clearInterval(intervalRef.current)` if it exists
+   - This prevents memory leaks when the component unmounts
+
+10. **Add the Stopwatch to your app**
+    - In `App.jsx`, import the `Stopwatch` component
+    - Add a new route for the stopwatch: `<Route path="/stopwatch" element={<Stopwatch />} />`
+    - Add a link to the Navbar
+
+### Part C: Custom Input Component with Ref as Prop
+
+**Goal:** Create a reusable custom input component that can receive refs from parent components, enabling focus management from outside the component. In React 19+, refs are passed as regular props instead of using `forwardRef`.
+
+#### Steps
+
+1. **Create the CustomInput component**
+   - Create a new file `src/components/CustomInput/CustomInput.jsx`
+   - Create a regular functional component (no special imports needed for refs)
+
+2. **Define the component with ref as a prop**
+   - Destructure props including `ref`: `{ label, error, ref, ...rest }`
+   - In React 19+, `ref` is just a regular prop like any other
+   - No wrapper function or special syntax needed
+
+3. **Build the input UI**
+   - Return a wrapper div containing:
+     - A label element
+     - An input element that receives the `ref` and `{...rest}` props
+     - A conditional error message when `error` prop is provided
+   - Add appropriate styling classes
+
+4. **Create a SearchForm component to test the ref prop**
+   - Create a new file `src/components/SearchForm/SearchForm.jsx`
+   - Import `useRef` and `useEffect` from React
+   - Import the `CustomInput` component
+
+6. **Use the custom input with a ref**
+   - Create a ref using `useRef(null)`
+   - Pass the ref to `CustomInput` using the `ref` prop
+   - Use `useEffect` to auto-focus the input on mount
+
+7. **Add search functionality**
+   - Create state for the search query
+   - Create state for search results (can be mock data)
+   - Add a submit handler that searches and clears the input
+   - Add a button that focuses the search input when clicked
+
+8. **Add the SearchForm to your app**
+   - In `App.jsx`, import the `SearchForm` component
+   - Add a new route: `<Route path="/search" element={<SearchForm />} />`
+   - Add a link to the Navbar
+
+### Part D: Modal with Focus Trap (Advanced Challenge)
+
+**Goal:** Create a modal component that traps focus inside it for accessibility, using refs to manage focus when opening and closing.
+
+#### Steps
+
+1. **Create the Modal component**
+   - Create a new file `src/components/Modal/Modal.jsx`
+   - Import `useRef` and `useEffect` from React
+   - The Modal should accept `isOpen`, `onClose`, `title`, and `children` props
+
+2. **Create refs for focus management**
+   - Create a ref for the modal container
+   - Create a ref to store the previously focused element (before modal opened)
+
+3. **Save focus position when modal opens**
+   - In a `useEffect` that runs when `isOpen` changes:
+     - When opening, save `document.activeElement` to your "previous focus" ref
+     - Focus the modal container or first focusable element inside
+
+4. **Restore focus when modal closes**
+   - In the same `useEffect`, return a cleanup function
+   - When the modal closes, restore focus to the previously focused element
+
+5. **Implement focus trapping**
+   - Get all focusable elements inside the modal (buttons, inputs, links)
+   - Add a keydown event listener for the Tab key
+   - If Shift+Tab on first element, move focus to last element
+   - If Tab on last element, move focus to first element
+
+6. **Handle Escape key**
+   - Add a keydown event listener for the Escape key
+   - Call `onClose` when Escape is pressed
+
+7. **Build the modal UI**
+   - Render nothing if `isOpen` is false
+   - Return a backdrop div with click-to-close functionality
+   - Inside, render a modal container with:
+     - A header with title and close button
+     - A content area rendering `children`
+     - A footer with action buttons
+
+8. **Create a page to demonstrate the modal**
+   - Create `src/components/ModalDemo/ModalDemo.jsx`
+   - Add state to control modal visibility
+   - Add buttons to open different modals
+   - Show how focus returns to the trigger button when modal closes
+
+9. **Add the ModalDemo to your app**
+   - Add a new route for `/modal-demo`
+   - Add a link to the Navbar
+
+### Hints
+
+- **useRef basics:**
+  ```jsx
+  const inputRef = useRef(null);
+  // Access the DOM element: inputRef.current
+  // Focus an input: inputRef.current.focus()
+  ```
+
+- **Ref as prop (React 19+):**
+  ```jsx
+  function CustomInput({ ref, ...props }) {
+    return <input ref={ref} {...props} />;
+  }
+  ```
+
+- **Legacy forwardRef syntax (React 18 and earlier):**
+  ```jsx
+  const CustomInput = forwardRef((props, ref) => {
+    return <input ref={ref} {...props} />;
+  });
+  CustomInput.displayName = 'CustomInput';
+  ```
+
+- **Storing interval IDs in refs:**
+  ```jsx
+  const intervalRef = useRef(null);
+  
+  const start = () => {
+    intervalRef.current = setInterval(() => {
+      setTime(prev => prev + 10);
+    }, 10);
+  };
+  
+  const stop = () => {
+    clearInterval(intervalRef.current);
+    intervalRef.current = null;
+  };
+  ```
+
+- **Cleanup on unmount:**
+  ```jsx
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+  ```
+
+- **Getting focusable elements in a modal:**
+  ```jsx
+  const focusableElements = modalRef.current.querySelectorAll(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  );
+  ```
+
+- **Saving and restoring focus:**
+  ```jsx
+  const previouslyFocusedRef = useRef(null);
+  
+  useEffect(() => {
+    if (isOpen) {
+      previouslyFocusedRef.current = document.activeElement;
+      // Focus first element in modal
+    }
+    return () => {
+      previouslyFocusedRef.current?.focus();
+    };
+  }, [isOpen]);
+  ```
+
+- **Time formatting helper:**
+  ```jsx
+  const formatTime = (ms) => {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = Math.floor((ms % 60000) / 1000);
+    const centiseconds = Math.floor((ms % 1000) / 10);
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${centiseconds.toString().padStart(2, '0')}`;
+  };
+  ```
+
+### Expected Result
+
+When you run the app, you should see:
+
+**Part A:**
+- The name input is automatically focused when ContactForm loads
+- A "Clear & Refocus" button clears the form and returns focus to the name input
+- Validation focuses on the first empty required field
+
+**Part B:**
+- A working stopwatch with Start, Stop, and Reset buttons
+- Time displays in `MM:SS.ms` format
+- The timer keeps running while navigating away (but stops if unmounted)
+- No memory leaks from orphaned intervals
+
+**Part C:**
+- A CustomInput component that accepts refs from parent components
+- The SearchForm auto-focuses the search input on mount
+- A "Focus Search" button programmatically focuses the input
+- The custom input properly passes through all standard input props
+
+**Part D (Advanced):**
+- A modal that focuses its content when opened
+- Tab key cycles only through focusable elements inside the modal
+- Pressing Escape closes the modal
+- When the modal closes, focus returns to the button that opened it
 
 ---
