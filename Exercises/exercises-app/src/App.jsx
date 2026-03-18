@@ -3,14 +3,19 @@ import Homepage from './components/Homepage/Homepage';
 import Layout from './components/Layout';
 import mockUser from './mockUser.json'
 import ContactForm from './components/ContactForm/ContactForm';
-
+import CharacterList from './components/CharacterList/CharacterList';
+import CharacterDetail from './components/CharacterDetail/CharacterDetail';
 
 function App() {
   return (
     <BrowserRouter>
     <Layout>
-      <Homepage user={mockUser} />
-      <ContactForm />
+      <Routes>
+        <Route path="/" element={<Homepage user={mockUser} />} />
+        <Route path="/contact" element={<ContactForm />} />
+        <Route path="/characters" element={<CharacterList />} />
+        <Route path="/characters/:id" element={<CharacterDetail />} />
+      </Routes>
     </Layout>
     </BrowserRouter>
   );
