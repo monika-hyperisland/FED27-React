@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import {createContext, useState, useEffect, useContext} from "react";
+export const CharacterContext = createContext();
 
 
-const CharacterList = () => {
+function CharacterProvider({children}) {
     const [characters, setCharacters] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    
     useEffect(() => {
         const fetchCharacters = async () => {
             try {
@@ -22,35 +23,22 @@ const CharacterList = () => {
                 setLoading(false);
             }
         };
-
-        fetchCharacters();
+        fetchCharacters();      
     }, []);
-
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-
-    if (error) {
-        return <p>Error: {error}</p>;
-    }
-
+    
     return (
-    <ul>
-      {characters.map((character) => {
-        const id = character.url.split("/").filter(Boolean).pop();
+        <CharacterContext.Provider value={{characters}}>
+            {children}
+        </CharacterContext.Provider>
+    );      
 
-        return (
-        <li key={character.name}>
-         <Link to={`/characters/${id}`}>
-            {character.name}
-         </Link>
-        </li>
-        );
-        })}
+}  
 
-    </ul>
-    );
-}
-
-
-export default CharacterList;
+export const useCharacters = () => {
+    const context = useContext(CharacterContext);
+    if (context === undefined) {
+        throw new Error("useCharacters must be used within a CharacterProvider");
+    }
+    return context;
+};  
+export default CharacterProvider;
