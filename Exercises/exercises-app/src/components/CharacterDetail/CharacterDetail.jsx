@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useFavorites } from "../../context/FavoritesContext";
+
 
 
 function CharacterDetail() {
@@ -10,6 +12,8 @@ function CharacterDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const { toggleFavorite, isFavorite } = useFavorites(); 
+  
   useEffect(() => {
     const fetchCharacter = async () => {
       try {
