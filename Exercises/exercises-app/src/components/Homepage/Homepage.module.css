@@ -1,8 +1,14 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
 .buttonLink {
   display: inline-block;
   margin: 0.5rem;
   padding: 0.5rem 1rem;
-  background-color: #4f46e5;
+  background-color: #e9617a;
   color: white;
   text-decoration: none;
   border-radius: 0.25rem;
@@ -10,6 +16,23 @@
 }
 
 .active {
-  background-color: #facc15;
+  background-color: #dbfbbf;
   color: black;
 }
+
+.app.light {
+  background-color: white;
+  color: black;
+  min-height: 100vh;
+}
+
+body.light {
+  background-color: white;
+  color: black;
+}
+
+body.dark {
+  background-color: #121212;
+  color: white;
+}
+
